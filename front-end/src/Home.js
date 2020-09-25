@@ -17,6 +17,7 @@ class Home extends Component {
         "imgUrl": "./"
       },
     ],
+    good_info: "",
   }
   async componentWillMount() {
     const result = await fetch('http://localhost:3000/goods');
@@ -36,8 +37,6 @@ class Home extends Component {
             <div key={index}>
               <Good className="good"
                 eachGood={good}
-                handleAdd={this.props.handleAddOrder}
-              // 将按钮按下动作填加在goodjs中
               >
               </Good>
             </div>

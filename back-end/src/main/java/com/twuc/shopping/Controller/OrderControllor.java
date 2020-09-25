@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin
 public class OrderControllor {
     @Autowired
     OrderRepository orderRepository;

@@ -4,7 +4,7 @@ class Good extends Component {
 
   handleAdd = (e) => {
     e.preventDefault();
-    alert(JSON.stringify(this.props.eachGood.name));
+    alert(JSON.stringify(this.props.eachGood));
   }
 
   render() {
@@ -19,7 +19,7 @@ class Good extends Component {
         <p className="goodUnitPrice">
           {this.props.eachGood.price}元/{this.props.eachGood.unit}
         </p>
-        <button className="addCart" onClick={this.props.handleAdd}>add to order</button>
+        <button className="addCart" onClick={(e) => this.handleAdd(e)}>add to order</button>
       </div>
     );
   }

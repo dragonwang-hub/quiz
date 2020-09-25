@@ -9,7 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "goods")
+@Table(name = "orders")
 @Builder
 @Data
 @AllArgsConstructor

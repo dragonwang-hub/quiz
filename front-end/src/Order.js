@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 
 class SingleOrder extends Component {
 
+  handleDelete = (e) => {
+    e.preventDefault();
+    alert(JSON.stringify(this.props.eachOrder.name));
+  }
+
   render() {
     return (
       <div className="orderInfo">
@@ -18,7 +23,7 @@ class SingleOrder extends Component {
           {this.props.eachOrder.unit}
         </td>
         <td className="orderUnit">
-          <button className="deleteOrder" onClick={this.props.handleAdd}>删除</button>
+          <button className="deleteOrder" onClick={(e) => this.handleDelete(e)}>删除</button>
         </td>
       </div>
     );
