@@ -1,17 +1,13 @@
 package com.twuc.shopping.Controller;
 
-import com.twuc.shopping.Dto.Goods;
 import com.twuc.shopping.Dto.Order;
-import com.twuc.shopping.Entity.GoodEtity;
 import com.twuc.shopping.Entity.OrderEntity;
 import com.twuc.shopping.Repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,5 +48,12 @@ public class OrderControllor {
                         .build())
                 .collect(Collectors.toList());
         return ResponseEntity.ok(orders);
+    }
+
+    @Transactional
+    @DeleteMapping("/orders")
+    public ResponseEntity deleteOrder(@RequestParam String name) {
+        orderRepository.deleteAllByName(name);
+        return ResponseEntity.noContent().build();
     }
 }

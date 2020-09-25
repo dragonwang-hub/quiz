@@ -21,8 +21,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,6 +34,7 @@ public class OrderControllorTest {
     MockMvc mockMvc;
     @Autowired
     OrderRepository orderRepository;
+
     @Test
     public void shouldAddNewOrderWhenNotHaveThisGoodOrder() throws Exception {
         Order order = Order.builder()
@@ -56,6 +56,7 @@ public class OrderControllorTest {
         assertEquals(all.get(0).getUnit(), "瓶");
         assertEquals(all.get(0).getCount(), 1);
     }
+
     @Test
     public void shouldAddOrderCountWhenHaveThisGoodOrder() throws Exception {
         OrderEntity orderEntity = OrderEntity.builder()
@@ -107,13 +108,44 @@ public class OrderControllorTest {
 
         mockMvc.perform(get("/orders"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$",hasSize(2)))
+                .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].name", is("雪碧")))
                 .andExpect(jsonPath("$[0].price", is(3)))
                 .andExpect(jsonPath("$[0].count", is(10)))
                 .andExpect(jsonPath("$[1].name", is("可乐")))
                 .andExpect(jsonPath("$[1].price", is(4)))
                 .andExpect(jsonPath("$[1].count", is(3)));
+    }
+
+    @Test
+    public void shouldDeleteOrderByNameWhenGetDeleteCommand() throws Exception {
+        OrderEntity orderEntity_1 = OrderEntity.builder()
+                .name("雪碧")
+                .price(3)
+                .unit("瓶")
+                .count(10)
+                .build();
+        OrderEntity orderEntity_2 = OrderEntity.builder()
+                .name("可乐")
+                .price(4)
+                .unit("瓶")
+                .count(3)
+                .build();
+        List<OrderEntity> orderEntityList = new ArrayList<>();
+        orderEntityList.add(orderEntity_1);
+        orderEntityList.add(orderEntity_2);
+        orderRepository.saveAll(orderEntityList);
+
+        List<OrderEntity> all = orderRepository.findAll();
+        assertNotNull(all);
+        assertEquals(all.size(), 2);
+
+        mockMvc.perform(delete("/orders")
+                .param("name","可乐"))
+                .andExpect(status().isNoContent());
+        all = orderRepository.findAll();
+        assertNotNull(all);
+        assertEquals(all.size(), 1);
     }
 
 }

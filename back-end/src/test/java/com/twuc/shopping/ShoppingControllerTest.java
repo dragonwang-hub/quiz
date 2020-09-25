@@ -90,7 +90,7 @@ public class ShoppingControllerTest {
     }
 
     @Test
-    public void shouldGetAllGooddWhenShowHomePage() throws Exception {
+    public void shouldGetAllGoodWhenShowHomePage() throws Exception {
         GoodEtity goodEntity_1 = GoodEtity.builder()
                 .name("雪碧")
                 .price(3)
