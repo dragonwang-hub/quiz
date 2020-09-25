@@ -34,9 +34,10 @@ class Home extends Component {
         <div className="goods">
           {this.state.goods.map((good, index) => (
             <div key={index}>
-              <Good className="phone"
+              <Good className="good"
                 eachGood={good}
                 handleAdd={this.props.handleAddOrder}
+              // 将按钮按下动作填加在goodjs中
               >
               </Good>
             </div>
