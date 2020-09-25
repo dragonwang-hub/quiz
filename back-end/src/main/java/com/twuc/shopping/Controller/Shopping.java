@@ -5,11 +5,14 @@ import com.twuc.shopping.Entity.GoodEtity;
 import com.twuc.shopping.Repository.GoodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 public class Shopping {
@@ -31,5 +34,18 @@ public class Shopping {
                         .build();
         goodRepository.save(build);
         return ResponseEntity.created(null).build();
+    }
+
+    @GetMapping("/goods")
+    public ResponseEntity<List<Goods>> getAllGoods() {
+        List<Goods> goods = goodRepository.findAll().stream().map(
+                item -> Goods.builder()
+                        .name(item.getName())
+                        .price(item.getPrice())
+                        .unit(item.getUnit())
+                        .imgUrl(item.getImgUrl())
+                        .build())
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(goods);
     }
 }
