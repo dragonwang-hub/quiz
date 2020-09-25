@@ -51,4 +51,32 @@ public class OrderControllorTest {
         assertEquals(all.get(0).getUnit(), "瓶");
         assertEquals(all.get(0).getCount(), 1);
     }
+    @Test
+    public void shouldAddOrderCountWhenHaveThisGoodOrder() throws Exception {
+        OrderEntity orderEntity = OrderEntity.builder()
+                .name("可乐")
+                .price(3)
+                .unit("瓶")
+                .count(3)
+                .build();
+        orderRepository.save(orderEntity);
+        Order order = Order.builder()
+                .name("可乐")
+                .price(3)
+                .unit("瓶")
+                .build();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(order);
+
+        mockMvc.perform(post("/order")
+                .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+        List<OrderEntity> all = orderRepository.findAll();
+        assertNotNull(all);
+        assertEquals(all.size(), 1);
+        assertEquals(all.get(0).getName(), "可乐");
+        assertEquals(all.get(0).getPrice(), 3);
+        assertEquals(all.get(0).getUnit(), "瓶");
+        assertEquals(all.get(0).getCount(), 4);
+    }
 }

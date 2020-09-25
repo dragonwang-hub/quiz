@@ -19,8 +19,9 @@ public class OrderControllor {
     public ResponseEntity addorder(@RequestBody Order order) {
         OrderEntity orderEntity = orderRepository.findByName(order.getName());
         if (orderEntity != null) {
-            int preCount = orderEntity.getCount();
-            orderEntity.setCount(preCount + 1);
+            int Count = orderEntity.getCount() + 1;
+            orderEntity.setCount(Count);
+            orderRepository.save(orderEntity);
             return ResponseEntity.created(null).build();
         }
         OrderEntity build =
