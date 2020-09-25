@@ -1,24 +1,31 @@
 import React from 'react';
-import logo from './logo.svg';
+import { Route, BrowserRouter, Switch, Link } from "react-router-dom";
+import Home from "./Home";
+import Order from "./Order";
+import AddGoods from "./AddGoods";
 import './App.css';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <BrowserRouter>
+        <nav className="navbar navbar-dark bg-primary bg-light">
+          <Link to="/" className="nav-link" id="nav-first">
+            商城
+            </Link>
+          <Link to="/order" className="nav-link">
+            订单
+            </Link>
+          <Link to="/addgoods" className="nav-link">
+            添加商品
+            </Link>
+        </nav>
+        <Switch>
+          <Route exact path="/order" component={Order} />
+          <Route exact path="/addgoods" component={AddGoods} />
+          <Route exact path="/" component={Home} />
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }
