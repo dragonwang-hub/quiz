@@ -14,11 +14,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -78,5 +83,36 @@ public class OrderControllorTest {
         assertEquals(all.get(0).getPrice(), 3);
         assertEquals(all.get(0).getUnit(), "瓶");
         assertEquals(all.get(0).getCount(), 4);
+    }
+
+    @Test
+    public void shouldGetAllGooddWhenShowHomePage() throws Exception {
+        OrderEntity orderEntity_1 = OrderEntity.builder()
+                .name("雪碧")
+                .price(3)
+                .unit("瓶")
+                .count(10)
+                .build();
+        OrderEntity orderEntity_2 = OrderEntity.builder()
+                .name("可乐")
+                .price(4)
+                .unit("瓶")
+                .count(3)
+                .build();
+
+        List<OrderEntity> orderEntityList = new ArrayList<>();
+        orderEntityList.add(orderEntity_1);
+        orderEntityList.add(orderEntity_2);
+        orderRepository.saveAll(orderEntityList);
+
+        mockMvc.perform(get("/orders"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$",hasSize(2)))
+                .andExpect(jsonPath("$[0].name", is("雪碧")))
+                .andExpect(jsonPath("$[0].price", is(3)))
+                .andExpect(jsonPath("$[0].count", is(10)))
+                .andExpect(jsonPath("$[1].name", is("可乐")))
+                .andExpect(jsonPath("$[1].price", is(4)))
+                .andExpect(jsonPath("$[1].count", is(3)));
     }
 }

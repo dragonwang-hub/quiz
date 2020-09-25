@@ -25,10 +25,6 @@ class Home extends Component {
       goods: data
     })
   }
-  handleAddOrder = () => {
-    // 将数据post订单列表
-  }
-
 
   render() {
     return (

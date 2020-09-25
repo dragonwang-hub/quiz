@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, BrowserRouter, Switch, Link } from "react-router-dom";
 import Home from "./Home";
-import Order from "./Order";
+import Orders from "./Orders";
 import AddGoods from "./AddGoods";
 import './App.css';
 
@@ -22,7 +22,7 @@ class App extends Component {
             </Link>
           </nav>
           <Switch>
-            <Route exact path="/order" component={Order} />
+            <Route exact path="/order" component={Orders} />
             <Route exact path="/addgoods" component={AddGoods} />
             <Route exact path="/Home" component={Home} />
             <Route exact path="/" component={Home} />
