@@ -86,7 +86,7 @@ public class OrderControllorTest {
     }
 
     @Test
-    public void shouldGetAllGooddWhenShowHomePage() throws Exception {
+    public void shouldGetAllOrdersWhenShowOrderPage() throws Exception {
         OrderEntity orderEntity_1 = OrderEntity.builder()
                 .name("雪碧")
                 .price(3)
@@ -115,4 +115,5 @@ public class OrderControllorTest {
                 .andExpect(jsonPath("$[1].price", is(4)))
                 .andExpect(jsonPath("$[1].count", is(3)));
     }
+
 }
