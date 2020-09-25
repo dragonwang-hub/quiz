@@ -30,8 +30,6 @@ public class ShoppingControllerTest {
     @Autowired
     GoodRepository goodRepository;
 
-    //    @BeforeEach
-
     @Test
     public void shouldAddGoodWhenNotExist() throws Exception {
         Goods good = Goods.builder()
@@ -51,7 +49,38 @@ public class ShoppingControllerTest {
         assertEquals(all.size(), 1);
         assertEquals(all.get(0).getName(), "可乐");
         assertEquals(all.get(0).getPrice(), 3);
-        assertEquals(all.get(0).getUnit(),"瓶");
+        assertEquals(all.get(0).getUnit(), "瓶");
+        assertEquals(all.get(0).getImgUrl(), "./coco");
+    }
+
+    @Test
+    public void shouldAddGoodFailedWhenNameExist() throws Exception {
+        Goods good = Goods.builder()
+                .name("可乐")
+                .price(3)
+                .unit("瓶")
+                .imgUrl("./coco")
+                .build();
+
+        GoodEtity goodEtity = GoodEtity.builder()
+                .name("可乐")
+                .price(4)
+                .unit("听")
+                .imgUrl("./coco")
+                .build();
+        goodRepository.save(goodEtity);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(good);
+
+        mockMvc.perform(post("/addgoods")
+                .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
+        List<GoodEtity> all = goodRepository.findAll();
+        assertNotNull(all);
+        assertEquals(all.size(), 1);
+        assertEquals(all.get(0).getName(), "可乐");
+        assertEquals(all.get(0).getPrice(), 4);
+        assertEquals(all.get(0).getUnit(), "听");
         assertEquals(all.get(0).getImgUrl(), "./coco");
     }
 
