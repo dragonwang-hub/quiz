@@ -51,4 +51,31 @@ public class CartControllerTest {
         assertEquals(all.get(0).getName(), "可乐");
         assertEquals(all.get(0).getCount(), 1);
     }
+
+    @Test
+    public void shouldAddGoodCountToCartWhenCartHaveThisGood() throws Exception {
+        Goods good = Goods.builder()
+                .name("可乐")
+                .price(3)
+                .unit("瓶")
+                .imgUrl("./coco")
+                .build();
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(good);
+
+        CartEntity cartEntity = CartEntity.builder()
+                .name("可乐")
+                .count(2)
+                .build();
+        cartRepository.save(cartEntity);
+
+        mockMvc.perform(post("/carts/add")
+                .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+        List<CartEntity> all = cartRepository.findAll();
+        assertNotNull(all);
+        assertEquals(all.size(), 1);
+        assertEquals(all.get(0).getName(), "可乐");
+        assertEquals(all.get(0).getCount(), 3);
+    }
 }
