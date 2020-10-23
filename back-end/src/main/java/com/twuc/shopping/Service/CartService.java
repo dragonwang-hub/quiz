@@ -42,4 +42,13 @@ public class CartService {
             throw new CommonException("删除购物车商品异常，请刷新页面");
         }
     }
+
+    public void clearUpCart() throws CommonException {
+        List<CartEntity> cartEntityList = cartRepository.findAll();
+        if (cartEntityList.size() > 0) {
+            cartRepository.deleteAll();
+        }else{
+            throw new CommonException("购物车已清空！");
+        }
+    }
 }

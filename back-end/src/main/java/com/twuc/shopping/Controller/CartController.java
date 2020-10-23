@@ -26,4 +26,10 @@ public class CartController {
     public void deleteGoodFromCart(@PathVariable String name) throws CommonException {
         cartService.deleteGoodFromCart(name);
     }
+
+    @DeleteMapping("/carts/clear")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void clearUpCart() throws CommonException {
+        cartService.clearUpCart();
+    }
 }

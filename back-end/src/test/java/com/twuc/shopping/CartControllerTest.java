@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -92,6 +93,31 @@ public class CartControllerTest {
                 .andExpect(status().isNoContent());
 
         List<CartEntity> all = cartRepository.findAll();
+        assertNotNull(all);
+        assertEquals(all.size(), 0);
+    }
+
+    @Test
+    public void shouldClearUpCartWhenCartHaveGood() throws Exception {
+        CartEntity cartEntity_1 = CartEntity.builder()
+                .name("coco")
+                .count(2)
+                .build();
+        CartEntity cartEntity_2 = CartEntity.builder()
+                .name("sprint")
+                .count(2)
+                .build();
+        List<CartEntity> cartEntityList = new ArrayList<>();
+        cartEntityList.add(cartEntity_1);
+        cartEntityList.add(cartEntity_2);
+        cartRepository.saveAll(cartEntityList);
+        List<CartEntity> all = cartRepository.findAll();
+        assertNotNull(all);
+        assertEquals(all.size(), 2);
+
+        mockMvc.perform(delete("/carts/clear"))
+                .andExpect(status().isNoContent());
+        all = cartRepository.findAll();
         assertNotNull(all);
         assertEquals(all.size(), 0);
     }
