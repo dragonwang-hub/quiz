@@ -17,11 +17,16 @@ class AddGoods extends Component {
   handleFormSubmit = async (e) => {
     e.preventDefault();
     alert(JSON.stringify(this.state));
-    const response = await axios.post('http://localhost:8080/addgood', this.props.eachGood)
-    console.log(response)
+    const good = [{
+      "name" : this.state.name,
+      "price" : this.state.price,
+      "unit" : this.state.unit,
+      "imgUrl" : this.state.imgUrl,
+    }]
+    await axios.post('http://localhost:8080/addgood', good)
   };
 
-  
+
 
   render() {
     return (
