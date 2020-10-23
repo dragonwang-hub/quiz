@@ -19,7 +19,7 @@ class Orders extends Component {
     ],
   }
   async componentWillMount() {
-    const result = await fetch('http://localhost:3000/orders');
+    const result = await fetch('http://localhost:8080/orders');
     const data = await result.json();
     this.setState({
       orders: data

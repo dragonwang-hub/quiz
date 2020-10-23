@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class AddGoods extends Component {
   state = {
@@ -13,10 +14,14 @@ class AddGoods extends Component {
       [field]: event.target.value,
     });
   };
-  handleFormSubmit = (e) => {
+  handleFormSubmit = async (e) => {
     e.preventDefault();
     alert(JSON.stringify(this.state));
+    const response = await axios.post('http://localhost:8080/addgood', this.props.eachGood)
+    console.log(response)
   };
+
+  
 
   render() {
     return (

@@ -5,7 +5,9 @@ import com.twuc.shopping.Dto.Goods;
 import com.twuc.shopping.Dto.Order;
 import com.twuc.shopping.Entity.CartEntity;
 import com.twuc.shopping.Entity.OrderEntity;
+import com.twuc.shopping.Entity.OrderOfCartEntity;
 import com.twuc.shopping.Repository.CartRepository;
+import com.twuc.shopping.Repository.OrderOfCartRepository;
 import com.twuc.shopping.Repository.OrderRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -32,6 +35,8 @@ public class CartControllerTest {
     MockMvc mockMvc;
     @Autowired
     CartRepository cartRepository;
+    @Autowired
+    OrderOfCartRepository orderRepository;
 
     @Test
     public void shouldAddNewGoodToCartWhenCartNotHaveThisGood() throws Exception {
@@ -120,5 +125,32 @@ public class CartControllerTest {
         all = cartRepository.findAll();
         assertNotNull(all);
         assertEquals(all.size(), 0);
+    }
+
+    @Test
+    public void shouldSubmitOrderWhenCartHaveGoods() throws Exception {
+        CartEntity cartEntity_1 = CartEntity.builder()
+                .name("coco")
+                .count(2)
+                .build();
+        CartEntity cartEntity_2 = CartEntity.builder()
+                .name("sprint")
+                .count(2)
+                .build();
+        List<CartEntity> cartEntityList = new ArrayList<>();
+        cartEntityList.add(cartEntity_1);
+        cartEntityList.add(cartEntity_2);
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String json = objectMapper.writeValueAsString(cartEntityList);
+
+        mockMvc.perform(post("/carts")
+                .content(json).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+
+        List<OrderOfCartEntity> all = (List<OrderOfCartEntity>) orderRepository.findAll();
+        assertNotNull(all);
+        assertEquals(all.size(), 1);
+
     }
 }

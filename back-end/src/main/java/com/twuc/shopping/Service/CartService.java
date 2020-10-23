@@ -3,8 +3,10 @@ package com.twuc.shopping.Service;
 import com.twuc.shopping.Dto.Goods;
 import com.twuc.shopping.Entity.CartEntity;
 import com.twuc.shopping.Entity.GoodEntity;
+import com.twuc.shopping.Entity.OrderOfCartEntity;
 import com.twuc.shopping.Exception.CommonException;
 import com.twuc.shopping.Repository.CartRepository;
+import com.twuc.shopping.Repository.OrderOfCartRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,8 @@ public class CartService {
 
     @Autowired
     CartRepository cartRepository;
+    @Autowired
+    OrderOfCartRepository orderRepository;
 
     public void addGoodToCart(Goods good) {
         List<CartEntity> cartEntityList = cartRepository.findByName(good.getName());
@@ -38,7 +42,7 @@ public class CartService {
         List<CartEntity> cartEntityList = cartRepository.findByName(name);
         if (cartEntityList.size() > 0) {
             cartRepository.deleteByName(name);
-        }else{
+        } else {
             throw new CommonException("删除购物车商品异常，请刷新页面");
         }
     }
@@ -47,8 +51,19 @@ public class CartService {
         List<CartEntity> cartEntityList = cartRepository.findAll();
         if (cartEntityList.size() > 0) {
             cartRepository.deleteAll();
-        }else{
+        } else {
             throw new CommonException("购物车已清空！");
+        }
+    }
+
+    public void cartsToOrder(List<CartEntity> cartEntityList) throws CommonException {
+        if (cartEntityList.size() > 0) {
+            OrderOfCartEntity orderOfCartEntity = OrderOfCartEntity.builder()
+                    .cartEntities(cartEntityList)
+                    .build();
+            orderRepository.save(orderOfCartEntity);
+        }else{
+            throw new CommonException("购物车无货品，请先添加货品至购物车！");
         }
     }
 }

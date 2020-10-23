@@ -21,4 +21,8 @@ public class CartEntity {
     private String name;
 
     private int count;
+
+    @ManyToOne
+    @JoinColumn(name="order_id")
+    private OrderOfCartEntity order;
 }
