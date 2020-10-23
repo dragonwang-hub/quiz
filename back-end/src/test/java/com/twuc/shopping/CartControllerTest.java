@@ -20,6 +20,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -77,5 +78,21 @@ public class CartControllerTest {
         assertEquals(all.size(), 1);
         assertEquals(all.get(0).getName(), "可乐");
         assertEquals(all.get(0).getCount(), 3);
+    }
+
+    @Test
+    public void shouldDeleteGoodFromCartWhenCartHaveThisGood() throws Exception {
+        CartEntity cartEntity = CartEntity.builder()
+                .name("coco")
+                .count(2)
+                .build();
+        cartRepository.save(cartEntity);
+
+        mockMvc.perform(delete("/carts/delete/coco"))
+                .andExpect(status().isNoContent());
+
+        List<CartEntity> all = cartRepository.findAll();
+        assertNotNull(all);
+        assertEquals(all.size(), 0);
     }
 }

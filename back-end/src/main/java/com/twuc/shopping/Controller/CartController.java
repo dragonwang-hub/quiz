@@ -2,6 +2,7 @@ package com.twuc.shopping.Controller;
 
 import com.twuc.shopping.Dto.Goods;
 import com.twuc.shopping.Entity.CartEntity;
+import com.twuc.shopping.Exception.CommonException;
 import com.twuc.shopping.Service.CartService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,5 +21,9 @@ public class CartController {
         cartService.addGoodToCart(good);
     }
 
-
+    @DeleteMapping("/carts/delete/{name}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteGoodFromCart(@PathVariable String name) throws CommonException {
+        cartService.deleteGoodFromCart(name);
+    }
 }
