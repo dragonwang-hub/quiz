@@ -1,6 +1,5 @@
 package com.twuc.shopping.Repository;
 
-import com.twuc.shopping.Entity.GoodEtity;
 import com.twuc.shopping.Entity.OrderEntity;
 import org.springframework.data.repository.CrudRepository;
 

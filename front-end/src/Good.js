@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 class Good extends Component {
 
-  handleAdd = (e) => {
+  handleAdd = async (e) => {
     e.preventDefault();
     alert(JSON.stringify(this.props.eachGood));
+    const response = await axios.post('/addgood', this.props.eachGood)
+    console.log(response)
   }
 
   render() {

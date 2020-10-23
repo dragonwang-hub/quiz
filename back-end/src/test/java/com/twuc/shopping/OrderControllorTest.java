@@ -1,9 +1,7 @@
 package com.twuc.shopping;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.twuc.shopping.Dto.Goods;
 import com.twuc.shopping.Dto.Order;
-import com.twuc.shopping.Entity.GoodEtity;
 import com.twuc.shopping.Entity.OrderEntity;
 import com.twuc.shopping.Repository.OrderRepository;
 import org.junit.jupiter.api.Test;

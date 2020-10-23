@@ -2,13 +2,12 @@ package com.twuc.shopping;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.twuc.shopping.Dto.Goods;
-import com.twuc.shopping.Entity.GoodEtity;
+import com.twuc.shopping.Entity.GoodEntity;
 import com.twuc.shopping.Repository.GoodRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-public class ShoppingControllerTest {
+public class ShoppingControllerControllerTest {
 
     @Autowired
     MockMvc mockMvc;
@@ -46,10 +45,10 @@ public class ShoppingControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(good);
 
-        mockMvc.perform(post("/addgoods")
+        mockMvc.perform(post("/addgood")
                 .content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
-        List<GoodEtity> all = goodRepository.findAll();
+        List<GoodEntity> all = goodRepository.findAll();
         assertNotNull(all);
         assertEquals(all.size(), 1);
         assertEquals(all.get(0).getName(), "可乐");
@@ -67,7 +66,7 @@ public class ShoppingControllerTest {
                 .imgUrl("./coco")
                 .build();
 
-        GoodEtity goodEntity = GoodEtity.builder()
+        GoodEntity goodEntity = GoodEntity.builder()
                 .name("可乐")
                 .price(4)
                 .unit("听")
@@ -77,10 +76,10 @@ public class ShoppingControllerTest {
         ObjectMapper objectMapper = new ObjectMapper();
         String json = objectMapper.writeValueAsString(good);
 
-        mockMvc.perform(post("/addgoods")
+        mockMvc.perform(post("/addgood")
                 .content(json).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest());
-        List<GoodEtity> all = goodRepository.findAll();
+        List<GoodEntity> all = goodRepository.findAll();
         assertNotNull(all);
         assertEquals(all.size(), 1);
         assertEquals(all.get(0).getName(), "可乐");
@@ -91,22 +90,22 @@ public class ShoppingControllerTest {
 
     @Test
     public void shouldGetAllGoodWhenShowHomePage() throws Exception {
-        GoodEtity goodEntity_1 = GoodEtity.builder()
+        GoodEntity goodEntity_1 = GoodEntity.builder()
                 .name("雪碧")
                 .price(3)
                 .unit("瓶")
                 .imgUrl("./coco")
                 .build();
-        GoodEtity goodEntity_2 = GoodEtity.builder()
+        GoodEntity goodEntity_2 = GoodEntity.builder()
                 .name("可乐")
                 .price(4)
                 .unit("听")
                 .imgUrl("./coco")
                 .build();
-        List<GoodEtity> goodEtityList = new ArrayList<>();
-        goodEtityList.add(goodEntity_1);
-        goodEtityList.add(goodEntity_2);
-        goodRepository.saveAll(goodEtityList);
+        List<GoodEntity> goodEntityList = new ArrayList<>();
+        goodEntityList.add(goodEntity_1);
+        goodEntityList.add(goodEntity_2);
+        goodRepository.saveAll(goodEntityList);
 
         mockMvc.perform(get("/goods"))
                 .andExpect(status().isOk())

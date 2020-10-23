@@ -1,7 +1,7 @@
 package com.twuc.shopping.Controller;
 
 import com.twuc.shopping.Dto.Goods;
-import com.twuc.shopping.Entity.GoodEtity;
+import com.twuc.shopping.Entity.GoodEntity;
 import com.twuc.shopping.Repository.GoodRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -12,18 +12,18 @@ import java.util.stream.Collectors;
 
 @RestController
 @CrossOrigin
-public class Shopping {
+public class ShoppingController {
     @Autowired
     GoodRepository goodRepository;
 
-    @PostMapping("/addgoods")
+    @PostMapping("/addgood")
     public ResponseEntity addGood(@RequestBody Goods good) {
-        GoodEtity goodEtity = goodRepository.findByName(good.getName());
-        if (goodEtity != null) {
+        List<GoodEntity> goodEntityList = goodRepository.findByName(good.getName());
+        if (goodEntityList.size() > 0) {
             return ResponseEntity.badRequest().build();
         }
-        GoodEtity build =
-                GoodEtity.builder()
+        GoodEntity build =
+                GoodEntity.builder()
                         .name(good.getName())
                         .price(good.getPrice())
                         .unit(good.getUnit())

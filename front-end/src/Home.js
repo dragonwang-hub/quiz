@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Good from "./Good";
+import axios from 'axios';
 
 class Home extends Component {
   state = {
@@ -19,9 +20,10 @@ class Home extends Component {
     ],
     good_info: "",
   }
-  async componentWillMount() {
-    const result = await fetch('http://localhost:3000/goods');
-    const data = await result.json();
+  componentWillMount = async () => {
+    // const result = await fetch('http://localhost:3000/goods');
+    const response = await axios.get('http://localhost:3000/goods')
+    const data = await response.json();
     this.setState({
       goods: data
     })
